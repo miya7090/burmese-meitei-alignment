@@ -1,7 +1,9 @@
 # creates embeddings given htm file
 # mostly just a modification of
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py
+# (see below)
 # - Michelle Yakubek
+
 
 # Copyright 2015 The TensorFlow Authors. All Rights Reserved.
 #
@@ -16,6 +18,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 # ==============================================================================
 
 from __future__ import absolute_import
@@ -36,6 +39,8 @@ import tensorflow as tf
 from bs4 import BeautifulSoup
 import codecs
 
+import pickle
+
 #######################################
 
 htmfile = "incompleteNetwork17K.htm"
@@ -43,7 +48,7 @@ batch_size = 128
 embedding_size = 128  # Dimension of the embedding vector.
 vocabulary_size = 6000 # number of most common words to keep
 num_steps = 20001 #checkpoints at 2000
-pathforsaving = "network_embeddings/run_one.ckpt"
+pathforsaving = "Tempor/run_one.ckpt"
 
 #######################################
 
@@ -86,11 +91,12 @@ def build_dataset(words):
   return data, count, dictionary, reverse_dictionary
 
 data, count, dictionary, reverse_dictionary = build_dataset(words)
-del words  # not needed, reduces memory.
+del words  # not needed
 print('Most common words (+UNK)', count[:5])
 print('Sample data', data[:10], [reverse_dictionary[i] for i in data[:10]])
 
-
+pickle.dump(dictionary, open("embedDict.p","wb"))
+pickle.dump(reverse_dictionary, open("embedRevDict.p","wb"))
 
 # Step 3: Function to generate a training batch for the skip-gram model.
 
@@ -182,7 +188,7 @@ with graph.as_default():
       normalized_embeddings, valid_dataset)
   similarity = tf.matmul(
       valid_embeddings, normalized_embeddings, transpose_b=True)
-
+  
   # Add variable initializer.
   init = tf.global_variables_initializer()
   
@@ -232,5 +238,6 @@ with tf.Session(graph=graph) as session:
         print(log_str)
     '''
   final_embeddings = normalized_embeddings.eval()
+  pickle.dump(similarity.eval(), open("embedSimilarity.p","wb"))
 
 #visualizer removed
