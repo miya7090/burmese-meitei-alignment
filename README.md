@@ -1,7 +1,7 @@
 # burmese-meitei-alignment
-Learning to Parse a Lower-Resource Language, Meitei, through Alignment with a Higher-Resource Language, Burmese
+Learning to Parse a Lower-Resource Language, Meitei, through Alignment with a Higher-Resource Language, Burmese.
 Please inform if you plan to use.
---- in progress ---
+-- in progress --
 
 Usage:
 
@@ -15,4 +15,4 @@ Creates embeddings given an htm file, saves ckpt
 3. procrustEmbeddings.py
 Reads from 2 ckpt's, aligns the vector spaces
 
-4. ---
+4. --
