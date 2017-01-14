@@ -2,9 +2,6 @@
 Learning to Parse a Lower-Resource Language, Meitei, through Alignment with a Higher-Resource Language, Burmese.
 
 
-Please inform if you plan to use.
-
-
 Usage:
 
 1. scrapeData.py
