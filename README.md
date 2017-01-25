@@ -7,7 +7,7 @@ Science fair research project 2017. in progress.
 1. scrapeData.py:
 Used to scrape foreign language data from the web, writes to an htm file.
 
-2. createEmbeddings.p:
+2. createEmbeddings.py:
 [partially inaccurate, changes being made]
 Creates embeddings given an htm file, saves ckpt.
 based on https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py
