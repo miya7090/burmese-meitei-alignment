@@ -1,6 +1,6 @@
 # burmese-meitei-alignment
 Learning to Parse a Lower-Resource Language, Meitei, through Alignment with a Higher-Resource Language, Burmese.
-Science fair research project 2017. in progress.
+Research project 2017. in progress.
 
 # usage
 
