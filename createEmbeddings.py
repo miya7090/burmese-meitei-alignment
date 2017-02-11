@@ -1,25 +1,13 @@
 # creates embeddings given htm file
-# mostly just a modification of
+# builds on
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py
-# (see below)
+# see that license before usage
 # - Michelle Yakubek
 
-
-# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # ==============================================================================
+
+
+# RUN chcp 65001 in cmd first!
 
 from __future__ import absolute_import
 from __future__ import division
@@ -43,29 +31,48 @@ import pickle
 
 #######################################
 
-htmfile = "incompleteNetwork17K.htm"
+dataFiles = ["bbcBurmese-SEG.htm","bur-uni-SEG.htm"]
 batch_size = 128
 embedding_size = 128  # Dimension of the embedding vector.
 vocabulary_size = 6000 # number of most common words to keep
-num_steps = 20001 #checkpoints at 2000
-pathforsaving = "Tempor/run_one.ckpt"
+num_steps = 12001 #checkpoints at 2000
+pathforsaving = "F_SEGBB/run_one.ckpt"
+embeddingF = "segBBEmbed.p"
 
 #######################################
 
-# Step 0: Get the HTML data into a text variable.
-f = codecs.open(htmfile, 'r', encoding="utf8")
-page = f.read()
-soup = BeautifulSoup(page, "html.parser")
-souptxt = soup.get_text().encode("utf-8")
-#print(souptxt)
+words = []
 
-# Step 1: Read the data as a list of strings.
-words = souptxt.split() # splitting by whitespace
+fileNo = 0;
+for File in dataFiles:
+  fileNo = fileNo+1
+  print("going through file "+str(fileNo)+"...\n")
+  with codecs.open(File, mode='r', encoding='utf-8') as input_file:
+    line = ''
+    while True:
+      word, space, line = line.partition(' ')
+      if space:
+        # A word was found
+        word = word.replace("\n","")
+        word = word.replace("/","")
+        word = word.replace("|","")
+        if len(word)>0:
+          words.append(word)
+      else:
+        # A word was not found; read a chunk of data from file
+        next_chunk = input_file.read(1000)
+        if next_chunk:
+          # Add the chunk to our line
+          line = word + next_chunk
+        else:
+          # No more data; yield the last word and return
+          words.append(word.rstrip('\n'))
+          break
+
 print('Data size', len(words))
-#print(words)
+
 
 # Step 2: Build the dictionary and replace rare words with UNK token.
-
 def build_dataset(words):
   # array of the most common instances, word|frequency
   count = [['UNK', -1]]
@@ -77,14 +84,17 @@ def build_dataset(words):
 
   data = list()
   unk_count = 0
-  
+
+  data.append(0)
+  data.append(0)
+  data.append(0) #debugging, don't remove
   for word in words:
     if word in dictionary: # if it's one of the most common words
       index = dictionary[word] # point it to same location in dictionary
+      data.append(index) # create array of indices
     else:
       index = 0  # point it to dictionary['UNK']
       unk_count += 1 # count unknowns this way since not counted by Counter
-    data.append(index) # create array of indices
   count[0][1] = unk_count
   
   reverse_dictionary = dict(zip(dictionary.values(), dictionary.keys()))
@@ -92,7 +102,7 @@ def build_dataset(words):
 
 data, count, dictionary, reverse_dictionary = build_dataset(words)
 del words  # not needed
-print('Most common words (+UNK)', count[:5])
+print('Most common words (+UNK)', count[:15])
 print('Sample data', data[:10], [reverse_dictionary[i] for i in data[:10]])
 
 pickle.dump(dictionary, open("embedDict.p","wb"))
@@ -238,6 +248,6 @@ with tf.Session(graph=graph) as session:
         print(log_str)
     '''
   final_embeddings = normalized_embeddings.eval()
-  pickle.dump(similarity.eval(), open("embedSimilarity.p","wb"))
+  pickle.dump(final_embeddings, open(embeddingF,"wb"))
 
 #visualizer removed
