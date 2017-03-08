@@ -4,11 +4,13 @@ Learning to Parse a Lower-Resource Language, Meitei, through Alignment with a Hi
 
 Research project 2017.
 
+This software will scrape a large foreign-language corpus from the web, segment it, create word embeddings for it, and perform Procrustes and other analysis upon it in order to generate a usable linguistic model.
 
 
-# SETUP:
 
-## PREREQUISITES:
+# Setup
+
+## PREREQUISITES
 
 1. [Anaconda 4.3.0 - Python 3.6](https://www.continuum.io/downloads)
 
@@ -20,13 +22,11 @@ Research project 2017.
 
 
 
-## SCRAPING:
+## SCRAPING
 
 1. run the scraper `scrapeData` in its directory: `python scrapeData.py`
 
-> this will automatically begin scraping from a list of 18 Burmese sites and will access a maximum of 100,000,000 pages
-
-> it will create 3 files: `MARCH.htm`, `MARCHLog.txt`, `MARCHSites.txt`
+> this will begin Burmese scraping with existing settings, and will create 3 files: `MARCH.htm`, `MARCHLog.txt`, `MARCHSites.txt`
 
 ## SEGMENTING
 
@@ -38,7 +38,9 @@ Research project 2017.
 
 3. run MMNLP, choose either `Orthographic Syllable Break` or `Phonological Syllable Break`
 
-> this will write to `MARCH_break.txt`. create a copy of `MARCH_break.txt` named `MARCH_break.htm`
+> this will write to `MARCH_break.txt`
+
+4. create a copy of `MARCH_break.txt` named `MARCH_break.htm`
 
 ### Option B
 
@@ -70,3 +72,6 @@ sic.py)
 1. modify `procrustEmbeddingsReadMatrix` as needed to produce the needed data
 
 2. run procrustes in its directory: `python procrustEmbeddingsReadMatrix.py`
+
+
+
