@@ -1,7 +1,9 @@
+# Michelle Yakubek
 # web scraper
+# see readme for more instructions
+
 # starts out with foreign-language sites, finds links to other foreign-language sites, etc
 # saves to an htm file, also writes to log/site files
-# - Michelle Yakubek
 
 # may need to run chcp 65001 in command line first
 
@@ -29,7 +31,7 @@ import codecs
 from time import strftime, localtime
 
 # --SETTINGS------------------------------------------------------------
-nameFile = "rootVariedMax100000000" #will write to an htm file of this name
+nameFile = "MARCH" #will write to an htm file of this name
 myURL = ["http://myanmarhealthcentre.com",
 "http://www.bbc.com/burmese/",
 "http://www.rfa.org/burmese/",
@@ -121,7 +123,7 @@ def deleteRomans(stringtxt):
 	try:
 		for i, word in enumerate(words):
 			if foreign(i-1, 0.8): # if word is foreign
-				if not foreign(words[i], 0.8) and not foreign(words[i+1], 0.8) not foreign(words[i+2], 0.8) and not foreign(words[i+3], 0.8) and not foreign(words[i+4], 0.8) and not foreign(words[i+5], 0.8):
+				if not foreign(words[i], 0.8) and not foreign(words[i+1], 0.8) and not foreign(words[i+2], 0.8) and not foreign(words[i+3], 0.8) and not foreign(words[i+4], 0.8) and not foreign(words[i+5], 0.8):
 				# if next six words are also foreign
 					j = 0 # max english string
 					while j<100 and not foreign(words[i+j], 0.8):
