@@ -1,22 +1,72 @@
-# burmese-meitei-alignment
+# Burmese-Meitei Alignment
 
 Learning to Parse a Lower-Resource Language, Meitei, through Alignment with a Higher-Resource Language, Burmese.
+
 Research project 2017.
 
-# usage
 
-1. scrapeData.py:
-Used to scrape foreign language data from the web, writes to an htm file.
 
-2. segmenter.py:
-Use this to segment Burmese in htm file. 
-Based on https://github.com/thantthet/MyanmarParser-Py
+# SETUP:
 
-3. createEmbeddings.py:
-Creates embeddings given an htm file, saves ckpt. 
-Based on https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py
+## PREREQUISITES:
 
-4. procrustEmbeddings.py:
-Reads from 2 ckpt's, aligns the vector spaces, performs k-nearest.
+1. [Anaconda 4.3.0 - Python 3.6](https://www.continuum.io/downloads)
 
-*project is still in progress!
+2. [TensorFlow](https://www.tensorflow.org/install/)
+
+3. [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-beautiful-soup)
+
+4. htm file of segmented comparison data
+
+
+
+## SCRAPING:
+
+1. run the scraper `scrapeData` in its directory: `python scrapeData.py`
+
+> this will automatically begin scraping from a list of 18 Burmese sites and will access a maximum of 100,000,000 pages
+
+> it will create 3 files: `MARCH.htm`, `MARCHLog.txt`, `MARCHSites.txt`
+
+## SEGMENTING
+
+### Option A
+
+1. install segmenter (Wunna Ko Ko et al): [MMNLP Syllable Breaker](http://myanmarnlpteam.blogspot.com/2008/02/syllable-segmentation-software.html)
+
+2. create a copy of `MARCH.htm` named `MARCH.txt`
+
+3. run MMNLP, choose either `Orthographic Syllable Break` or `Phonological Syllable Break`
+
+> this will write to `MARCH_break.txt`. create a copy of `MARCH_break.txt` named `MARCH_break.htm`
+
+### Option B
+
+1. run the segmenter `segmenter` in its directory: `python segmenter.py`
+
+> based on [MyanmarParser-Py](https://github.com/thantthet/MyanmarParser-Py)
+
+> this will segment `MARCH.htm` and create the file `MARCH_break.htm`
+
+## EMBEDDING
+
+1. create a directory `EMBEDS_march` that the variable `pathforsaving` can use
+2. run the embedder `createEmbeddings` in its directory: `python createEmbeddings.py`
+
+> based on [basic 
+word2vec](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_ba
+sic.py)
+
+> this will create embeddings from `MARCH_break.htm` and will save a pickled embedding `embeds_march.p` and two dictionaries, `march_dict.p` and `march_rev_dict.p`
+
+3. modify the embedder for your comparison data so it creates embeddings from `APRIL_break.htm`, saves to "april" files, etc.
+
+4. create a directory `EMBEDS_april`
+
+5. run the program again: `python createEmbeddings.py`
+
+## PROCRUSTES
+
+1. modify `procrustEmbeddingsReadMatrix` as needed to produce the needed data
+
+2. run procrustes in its directory: `python procrustEmbeddingsReadMatrix.py`
