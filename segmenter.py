@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# by michelle yakubek
-# input an htm file, will write the segmented Burmese
-# to another htm file
+
+# Michelle Yakubek
+# see readme for more instructions
 # makes use of github.com/thantthet 's code
-# see license in myparser for details
+# see the license in myparser.py for details
 
 from myparser import MyParser
 import codecs
@@ -12,8 +12,8 @@ codecs.register(lambda name: codecs.lookup('utf-8') if name == 'cp65001' else No
 
 # --------------------
 
-dataFiles = ["bur-uni.htm"]
-exportHTM = "bur-uni-SEG.htm" # new file will be created. if file already exists will append
+dataFiles = ["MARCH.htm"] # add multiple files to this as needed
+exportHTM = "MARCH_break.htm" # new file will be created. if file already exists will append
 
 # --------------------
 
