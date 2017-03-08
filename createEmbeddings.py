@@ -1,13 +1,12 @@
+# Michelle Yakubek
 # creates embeddings given htm file
-# builds on
-# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py
-# see that license before usage
-# - Michelle Yakubek
+# see readme for more instructions
 
 # ==============================================================================
 
+# RUN chcp 65001 in cmd line first!
 
-# RUN chcp 65001 in cmd first!
+# ==============================================================================
 
 from __future__ import absolute_import
 from __future__ import division
@@ -31,14 +30,15 @@ import pickle
 
 #######################################
 
-dataFiles = ["bbcBurmese-SEG.htm","bur-uni-SEG.htm"]
+dataFiles = ["MARCH_break.htm"] # add multiple files to this as needed
 batch_size = 128
 embedding_size = 128  # Dimension of the embedding vector.
-vocabulary_size = 6000 # number of most common words to keep
+vocabulary_size = 4000 # number of most common words to keep
 num_steps = 12001 #checkpoints at 2000
-pathforsaving = "F_SEGBB/run_one.ckpt"
-embeddingF = "segBBEmbed.p"
-
+pathforsaving = "EMBEDS_march/run_one.ckpt"
+embeddingF = "embeds_march.p"
+dictName = "march_dict.p"
+revDictName = "march_rev_dict.p"
 #######################################
 
 words = []
@@ -105,8 +105,8 @@ del words  # not needed
 print('Most common words (+UNK)', count[:15])
 print('Sample data', data[:10], [reverse_dictionary[i] for i in data[:10]])
 
-pickle.dump(dictionary, open("embedDict.p","wb"))
-pickle.dump(reverse_dictionary, open("embedRevDict.p","wb"))
+pickle.dump(dictionary, open(dictName,"wb"))
+pickle.dump(reverse_dictionary, open(revDictName,"wb"))
 
 # Step 3: Function to generate a training batch for the skip-gram model.
 
