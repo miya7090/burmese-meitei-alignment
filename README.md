@@ -36,15 +36,13 @@ This software will scrape a large foreign-language corpus from the web, segment 
 
 2. create a copy of `MARCH.htm` named `MARCH.txt`
 
-3. run MMNLP, choose either `Orthographic Syllable Break` or `Phonological Syllable Break`
-
-> this will write to `MARCH_break.txt`
+3. run MMNLP upon it- choose either `Orthographic Syllable Break` or `Phonological Syllable Break`
 
 4. create a copy of `MARCH_break.txt` named `MARCH_break.htm`
 
 ### Option B
 
-1. run the segmenter `segmenter` in its directory: `python segmenter.py`
+1. run the `segmenter` in its directory: `python segmenter.py`
 
 > based on [MyanmarParser-Py](https://github.com/thantthet/MyanmarParser-Py)
 
@@ -52,14 +50,14 @@ This software will scrape a large foreign-language corpus from the web, segment 
 
 ## EMBEDDING
 
-1. create a directory `EMBEDS_march` that the variable `pathforsaving` can use
-2. run the embedder `createEmbeddings` in its directory: `python createEmbeddings.py`
-
 > based on [basic 
 word2vec](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_ba
 sic.py)
 
 > this will create embeddings from `MARCH_break.htm` and will save a pickled embedding `embeds_march.p` and two dictionaries, `march_dict.p` and `march_rev_dict.p`
+
+1. create a directory `EMBEDS_march` that the variable `pathforsaving` can use
+2. run the embedder `createEmbeddings` in its directory: `python createEmbeddings.py`
 
 3. modify the embedder for your comparison data so it creates embeddings from `APRIL_break.htm`, saves to "april" files, etc.
 
