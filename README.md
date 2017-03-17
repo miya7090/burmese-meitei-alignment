@@ -2,9 +2,9 @@
 
 Learning to Parse a Lower-Resource Language, Meitei, through Alignment with a Higher-Resource Language, Burmese.
 
-Research project 2017.
-
 This software will scrape a large foreign-language corpus from the web, segment it, create word embeddings for it, and perform Procrustes and other analysis upon it in order to generate a usable linguistic model.
+
+Composed of 4 stages that can stand alone as needed.
 
 
 
