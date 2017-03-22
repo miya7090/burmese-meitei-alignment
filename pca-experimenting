@@ -59,4 +59,3 @@ for LLL in range(30):
       myfile.write(secondRevDict[index].encode("utf-8"))    ## may or may not need .encode("utf-8")
     with open(FL, "a") as myfile:
       myfile.write(",")
-      
