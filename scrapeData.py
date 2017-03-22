@@ -7,17 +7,6 @@
 
 # may need to run chcp 65001 in command line first
 
-'''
-to-do list:
- - check for html content before checking if foreign
- - allow parent sites
- - normalize fonts
- - don't read sites with #s etc in the url
- - give up on sites that take too long!
- - delay link cutoff
- - change linkhistoryread so checks all prefixes, other forms
-'''
-
 from html.parser import HTMLParser  
 from urllib.request import urlopen  
 from urllib import parse
@@ -31,7 +20,7 @@ import codecs
 from time import strftime, localtime
 
 # --SETTINGS------------------------------------------------------------
-nameFile = "MARCH" #will write to an htm file of this name
+nameFile = "ooo" #will write to an htm file of this name
 myURL = ["http://myanmarhealthcentre.com",
 "http://www.bbc.com/burmese/",
 "http://www.rfa.org/burmese/",
@@ -44,16 +33,13 @@ myURL = ["http://myanmarhealthcentre.com",
 "http://linletkyalsin.blogspot.com/",
 "http://www.kamayutmedia.com/",
 "https://www.jw.org/mya/",
-"http://hivinfo4mm.org/",
 "http://www.myanmarwebdesigner.com/blog/",
 "http://burmese.dvb.no/dvblive",
-"http://soccermyanmar.com/",
 "http://www.yatanarpon.com.mm/",
 "http://www.news-eleven.com/"] #parent sites to go off of
 maxPages = 100000000 # google search with "site:xxxyoururlxxx" beforehand to get an idea
 linkHistoryRead = "none" # "none" or "xxxx.txt", will not access these sites (bug: only checks for the exact URL)
 # ----------------------------------------------------------------------
-
 
 log_file = open(nameFile+"Log.txt", "a")
 site_file = open(nameFile+"Sites.txt", "a")
@@ -144,7 +130,7 @@ def processAndWriteData(url):
 	souptxt = soup.get_text()
 	
 	#check is foreign
-	if not foreign(souptxt, 0.5, True):
+	if not foreign(souptxt, 0.4, True):
 		paw("\nE")
 		raise Exception('not foreign')
 		
@@ -154,7 +140,29 @@ def processAndWriteData(url):
 	with open(nameFile+".htm", "ab") as myfile:
 		myfile.write(soupbytes)
 		# maybe write to compressed file? #to-do
-		
+
+def urlFilter(urlStr): # filters out weird url stuff
+	if len(urlStr)>200: # ignore long url codes
+		return("NULL")
+	breakoffs = ["#", ":", "%", "?", "&", "="] # may invalidate some urls
+	brokenUp = urlStr.split('/')
+	front = brokenUp.pop(0)
+	for i, part in enumerate(brokenUp):
+		for breakChar in breakoffs:
+			if breakChar in part:
+				brokenUp[i] = part[0:(part.find(breakChar))] # get rid of stuff after #, :, etc.
+				brokenUp = brokenUp[0:i+1]
+				return(front+'/'+('/'.join(brokenUp)))
+
+def inThatDomain(urlStr, search): # checks if site in a domain
+	brokenUp = urlStr.split('/')
+	mainString = brokenUp[2]
+	mainString = mainString.split('.')
+	for wrd in mainString: # e.g.: en, wikipedia, com (from en.wikipedia.com)
+		if wrd == search:
+			return True
+	return False
+
 def spider(url):
 	pagesToVisit = []
 	for link in url:
@@ -164,7 +172,9 @@ def spider(url):
 		with open(linkHistoryRead, 'r') as past:
 			for line in past.readlines():
 				pagesExtAlready.append(line)
-	print(pagesExtAlready)
+				
+	forbidDomains = ["wikipedia"]
+	# print(pagesExtAlready)
 	numberVisited = 0
 	numberSuccessfulVisited = 0
 
@@ -174,18 +184,27 @@ def spider(url):
 		numberSuccessfulVisited = numberSuccessfulVisited +1
 		numberVisited = numberVisited +1
 		
-		try:
+		if True:
 			processAndWriteData(url)
 			parser = LinkParser()
 			links = parser.getLinks(url) # get all the links on that webpage
 			#print(links)
 			for toLink in links: # check if those links are valid
+				filtLink = urlFilter(toLink)
+				paw(filtLink+" VS "+toLink);
+				
+
+				#for domain in forbidDomains:
+				#	if inThatDomain(toLink, domain) == True:
+				#		raise Exception("site forbidden")
+				#if toLink == "NULL":
+				#	raise Exception("url too long")
 				if checkPastHave(toLink, pagesToVisit) == False:
 					if checkPastHave(toLink, pagesExtAlready) == False: #if haven't visited
 						pagesToVisit.append(toLink)
 			paw("\n"+str(numberVisited)+"|"+str(numberSuccessfulVisited)+"/"+str(len(pagesToVisit))+"\n")
 			site_file.write(url+"\n")
-		except:
+		if False:
 			numberSuccessfulVisited = numberSuccessfulVisited-1
 
 		
