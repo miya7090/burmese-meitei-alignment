@@ -6,6 +6,8 @@ This software will scrape a large foreign-language corpus from the web, segment 
 
 Composed of 4 stages that can stand alone as needed.
 
+(in progress!)
+
 
 
 # Setup
